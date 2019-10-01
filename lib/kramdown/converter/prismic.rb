@@ -136,14 +136,25 @@ module Kramdown
       end
 
       def convert_iframe(element)
+        if (element.attr["src"] != nil) && (element.attr["src"].include? "youtube.com")
+          convert_embed_youtube(element)
+        else
+          nil
+        end
+      end
+
+      def convert_embed_youtube(element)
         {
             type: 'embed',
             data: {
-                embed_url: element.attr["src"],
+                embed_url: element.attr["src"].sub("embed/", "watch?v="),
                 width: element.attr["width"],
                 height: element.attr["height"],
                 type: "video",
                 version: "1.0",
+                html: "<iframe width=\"#{element.attr["width"]}\" height=\"#{element.attr["height"]}\" src=\"#{element.attr["src"]}\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>",
+                provider_name: "YouTube",
+                provider_url: "https://www.youtube.com/",
             }
         }
       end
