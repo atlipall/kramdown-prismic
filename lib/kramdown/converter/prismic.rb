@@ -39,6 +39,9 @@ module Kramdown
             warning('nested list moved to the top level')
             elements << element
             extract_non_nestable_elements(element, elements)
+          elsif element.type == :html_element && element.value == "iframe"
+            elements << element
+            warning('images inside content will be moved to the top level and may be rendered differently') if child.children.size > 1
           else
             memo << element
             extract_non_nestable_elements(element, elements)
@@ -124,9 +127,27 @@ module Kramdown
       end
 
       def convert_html_element(element)
-        warning('translating html elements is not supported')
+        if element.value == "iframe"
+          convert_iframe(element)
+        else
+          warning('translating html elements is not supported')
         nil
+        end
       end
+
+      def convert_iframe(element)
+        {
+            type: 'embed',
+            data: {
+                embed_url: element.attr["src"],
+                width: element.attr["width"],
+                height: element.attr["height"],
+                type: "video",
+                version: "1.0",
+            }
+        }
+      end
+
 
       def convert_table(element)
         warning('translating table is not supported')
@@ -210,10 +231,6 @@ module Kramdown
 
       def extract_span_br(element, memo)
         memo[:text] += "\n"
-      end
-
-      def extract_span_html_element(element, memo)
-        warning('translating html elements is not supported')
       end
 
       def extract_span_footnote(element, memo)
