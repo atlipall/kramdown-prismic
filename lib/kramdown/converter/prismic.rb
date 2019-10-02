@@ -51,7 +51,11 @@ module Kramdown
       end
 
       def convert_element(element)
+        begin
         send("convert_#{element.type}", element)
+        rescue
+          #warning('error sending')
+        end
       end
 
       def convert_header(element)
@@ -199,7 +203,11 @@ module Kramdown
 
       def extract_content(element, memo={text: '', spans: []})
         element.children.inject(memo) do |memo2, child|
+          begin
           send("extract_span_#{child.type}", child, memo2)
+          rescue
+            #warning('error sending')
+          end
           memo2
         end
       end
