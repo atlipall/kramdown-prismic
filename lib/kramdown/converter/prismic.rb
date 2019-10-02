@@ -52,7 +52,7 @@ module Kramdown
 
       def convert_element(element)
         begin
-        send("convert_#{element.type}", element)
+          send("convert_#{element.type}", element)
         rescue
           #warning('error sending')
         end
@@ -140,7 +140,7 @@ module Kramdown
       end
 
       def convert_iframe(element)
-        if (element.attr["src"] != nil) && (element.attr["src"].include? "youtube.com")
+        if (element.attr["src"] != nil) && ((element.attr["src"].include? "youtube.com") || (element.attr["src"].include? "youtube-nocookie.com"))
           convert_embed_youtube(element)
         else
           nil
@@ -198,13 +198,11 @@ module Kramdown
         #warning('translating raw is not supported')
         nil
       end
-        nil
-      end
 
       def extract_content(element, memo={text: '', spans: []})
         element.children.inject(memo) do |memo2, child|
           begin
-          send("extract_span_#{child.type}", child, memo2)
+            send("extract_span_#{child.type}", child, memo2)
           rescue
             #warning('error sending')
           end
