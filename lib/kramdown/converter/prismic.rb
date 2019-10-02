@@ -34,14 +34,14 @@ module Kramdown
         child.children = child.children.inject([]) do |memo, element|
           if element.type == :img
             elements << element
-            warning('images inside content will be moved to the top level and may be rendered differently') if child.children.size > 1
+            #warning('images inside content will be moved to the top level and may be rendered differently') if child.children.size > 1
           elsif element.type == :ul
-            warning('nested list moved to the top level')
+            #warning('nested list moved to the top level')
             elements << element
             extract_non_nestable_elements(element, elements)
           elsif element.type == :html_element && element.value == "iframe"
             elements << element
-            warning('images inside content will be moved to the top level and may be rendered differently') if child.children.size > 1
+            #warning('images inside content will be moved to the top level and may be rendered differently') if child.children.size > 1
           else
             memo << element
             extract_non_nestable_elements(element, elements)
@@ -130,7 +130,7 @@ module Kramdown
         if element.value == "iframe"
           convert_iframe(element)
         else
-          warning('translating html elements is not supported')
+          #warning('translating html elements is not supported')
         nil
         end
       end
@@ -161,37 +161,39 @@ module Kramdown
 
 
       def convert_table(element)
-        warning('translating table is not supported')
+        #warning('translating table is not supported')
         nil
       end
 
       def convert_dl(element)
-        warning('translating dl is not supported')
+        #warning('translating dl is not supported')
         nil
       end
 
       def convert_math(element)
-        warning('translating math is not supported')
+        #warning('translating math is not supported')
         nil
       end
 
       def convert_comment(element)
-        warning('translating comment is not supported')
+        #warning('translating comment is not supported')
         nil
       end
 
       def convert_xml_comment(element)
-        warning('translating xml_comment is not supported')
+        #warning('translating xml_comment is not supported')
         nil
       end
 
       def convert_xml_pi(element)
-        warning('translating xml_pi is not supported')
+        #warning('translating xml_pi is not supported')
         nil
       end
 
       def convert_raw(element)
-        warning('translating raw is not supported')
+        #warning('translating raw is not supported')
+        nil
+      end
         nil
       end
 
@@ -245,11 +247,11 @@ module Kramdown
       end
 
       def extract_span_footnote(element, memo)
-        warning('translating footnote is not supported')
+        #warning('translating footnote is not supported')
       end
 
       def extract_span_abbreviation(element, memo)
-        warning('translating abbreviation is not supported')
+        #warning('translating abbreviation is not supported')
         memo[:text] += element.value
       end
 
